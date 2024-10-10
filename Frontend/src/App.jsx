@@ -15,19 +15,19 @@ import Footer from './components/layout/Footer';
 
 const App = () => {
   return (
-    // Add a container div with flex properties
+ 
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar />
-      {/* The main content area */}
+
       <div style={{ flex: 1 }}>
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* Authentication Routes */}
+   
           <Route path="/user/register" element={<UserRegister />} />
           <Route path="/user/login" element={<UserLogin />} />
           <Route path="/admin/register" element={<AdminRegister />} />
           <Route path="/admin/login" element={<AdminLogin />} />
-          {/* Protected Routes */}
+
           <Route
             path="/user/dashboard"
             element={

@@ -1,20 +1,20 @@
-// src/contexts/AuthContext.js
+
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-// Create Context
+
 export const AuthContext = createContext();
 
-// Provider Component
+
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({
     isAuthenticated: false,
     token: null,
-    user: null, // Contains user data like username and role
+    user: null,
   });
 
   useEffect(() => {
-    // Check for saved token in localStorage
+
     const savedToken = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
     if (savedToken && savedUser) {
@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
         token: savedToken,
         user: JSON.parse(savedUser),
       });
-      // Set default axios header
+
       axios.defaults.headers.common['Authorization'] = `Bearer ${savedToken}`;
     }
   }, []);

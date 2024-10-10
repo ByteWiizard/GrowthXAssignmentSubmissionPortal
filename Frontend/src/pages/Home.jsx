@@ -1,4 +1,4 @@
-// src/pages/Home.js
+
 import React, { useState } from 'react';
 import { Container, Box, Tabs, Tab, Paper } from '@mui/material';
 import UserRegister from '../components/Auth/register/UserRegisteration';

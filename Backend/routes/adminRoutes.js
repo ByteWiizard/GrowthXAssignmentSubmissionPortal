@@ -1,4 +1,4 @@
-// routes/adminRoutes.js
+
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
@@ -7,7 +7,7 @@ const User = require('../models/User');
 const Assignment = require('../models/Assignment');
 const auth = require('../middleware/auth');
 
-// POST /admin/register
+
 router.post('/register', async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -33,7 +33,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// POST /admin/login
+
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -55,7 +55,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// GET /admin/assignments
+
 router.get('/assignments', auth('admin'), async (req, res) => {
     try {
         const assignments = await Assignment.find({ adminId: req.user.id })
@@ -68,7 +68,7 @@ router.get('/assignments', auth('admin'), async (req, res) => {
     }
 });
 
-// POST /admin/assignments/:id/accept
+
 router.post('/assignments/:id/accept', auth('admin'), async (req, res) => {
     try {
         let assignment = await Assignment.findById(req.params.id);
@@ -85,7 +85,7 @@ router.post('/assignments/:id/accept', auth('admin'), async (req, res) => {
     }
 });
 
-// POST /admin/assignments/:id/reject
+
 router.post('/assignments/:id/reject', auth('admin'), async (req, res) => {
     try {
         let assignment = await Assignment.findById(req.params.id);

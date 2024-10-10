@@ -1,4 +1,4 @@
-// src/components/Layout/Navbar.js
+
 import React, { useContext } from 'react';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';

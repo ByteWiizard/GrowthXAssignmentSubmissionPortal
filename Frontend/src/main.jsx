@@ -1,4 +1,4 @@
-// src/main.jsx
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
@@ -16,7 +16,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    // Customize your typography here
+
   },
 });
 ReactDOM.render(

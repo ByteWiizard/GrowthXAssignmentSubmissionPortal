@@ -1,4 +1,4 @@
-// routes/userRoutes.js
+
 const express = require('express');
 const router = express.Router();
 const upload = require('../middleware/upload');
@@ -8,7 +8,7 @@ const User = require('../models/User');
 const Assignment = require('../models/Assignment');
 const auth = require('../middleware/auth');
 
-// POST /user/register
+
 router.post('/register', async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -34,7 +34,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// POST /user/login
+
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -58,7 +58,7 @@ router.post('/login', async (req, res) => {
 
 
 
-// GET /user/admins
+
 router.get('/admins', auth('user'), async (req, res) => {
     try {
         const admins = await User.find({ role: 'admin' }).select('-password');
@@ -74,7 +74,7 @@ router.post('/upload', auth('user'), upload.single('file'), async (req, res) => 
     const { task, adminId } = req.body;
     
     console.log(adminId);
-    // Ensure either task or file is provided
+
     if (!task && !req.file) {
       return res.status(400).json({ message: 'Please provide a task or upload a file' });
     }
@@ -91,8 +91,8 @@ router.post('/upload', auth('user'), upload.single('file'), async (req, res) => 
       }
   
       if (req.file) {
-        assignmentData.fileUrl = req.file.path; // Save the file path
-        assignmentData.fileName = req.file.originalname; // Save the original file name
+        assignmentData.fileUrl = req.file.path; 
+        assignmentData.fileName = req.file.originalname; 
       }
   
       const assignment = new Assignment(assignmentData);
