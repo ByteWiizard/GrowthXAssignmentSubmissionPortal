@@ -104,4 +104,17 @@ router.post('/upload', auth('user'), upload.single('file'), async (req, res) => 
     }
   });
 
+
+  router.get('/assignments', auth('user'), async (req, res) => {
+    try {
+      const assignments = await Assignment.find({ userId: req.user.id })
+        .populate('adminId', 'username')
+        .sort({ createdAt: -1 });
+      res.json(assignments);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
+  });
+
 module.exports = router;

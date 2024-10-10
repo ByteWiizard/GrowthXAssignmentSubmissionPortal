@@ -1,13 +1,15 @@
-// src/pages/UserDashboard.js
 import React from 'react';
+import { Box } from '@mui/material';
 import AssignmentUpload from '../components/assignments/AssignmentUpload';
-
+import UserAssignmentList from '../components/assignments/UserAssignmentList';
 const UserDashboard = () => {
   return (
-    <div>
+    <Box sx={{ mt: 4 }}>
       <AssignmentUpload />
-      {/* You can also display user's assignments here */}
-    </div>
+      <Box sx={{ mt: 4 }}>
+        <UserAssignmentList />
+      </Box>
+    </Box>
   );
 };
 
