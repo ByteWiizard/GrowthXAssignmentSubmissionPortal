@@ -17,7 +17,7 @@ const Navbar = () => {
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, color: '#fff', textDecoration: 'none' }}>
-          Assignment Portal
+          GrowthX Assignment Portal
         </Typography>
         {auth.isAuthenticated ? (
           <>
@@ -37,12 +37,7 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            <Button color="inherit" component={Link} to="/user/login">
-              User Login
-            </Button>
-            <Button color="inherit" component={Link} to="/admin/login">
-              Admin Login
-            </Button>
+            
           </>
         )}
       </Toolbar>

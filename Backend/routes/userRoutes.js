@@ -1,6 +1,7 @@
 // routes/userRoutes.js
 const express = require('express');
 const router = express.Router();
+const upload = require('../middleware/upload');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
@@ -55,22 +56,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// POST /user/upload
-router.post('/upload', auth('user'), async (req, res) => {
-    const { task, adminId } = req.body;
-    try {
-        const assignment = new Assignment({
-            userId: req.user.id,
-            task,
-            adminId,
-        });
-        await assignment.save();
-        res.json({ message: 'Assignment uploaded successfully' });
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
-    }
-});
+
 
 // GET /user/admins
 router.get('/admins', auth('user'), async (req, res) => {
@@ -82,5 +68,40 @@ router.get('/admins', auth('user'), async (req, res) => {
         res.status(500).send('Server error');
     }
 });
+
+
+router.post('/upload', auth('user'), upload.single('file'), async (req, res) => {
+    const { task, adminId } = req.body;
+    
+    console.log(adminId);
+    // Ensure either task or file is provided
+    if (!task && !req.file) {
+      return res.status(400).json({ message: 'Please provide a task or upload a file' });
+    }
+  
+    try {
+      const assignmentData = {
+        userId: req.user.id,
+        adminId,
+        status: 'pending',
+      };
+  
+      if (task) {
+        assignmentData.task = task;
+      }
+  
+      if (req.file) {
+        assignmentData.fileUrl = req.file.path; // Save the file path
+        assignmentData.fileName = req.file.originalname; // Save the original file name
+      }
+  
+      const assignment = new Assignment(assignmentData);
+      await assignment.save();
+      res.json({ message: 'Assignment uploaded successfully' });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
+  });
 
 module.exports = router;

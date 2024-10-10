@@ -9,6 +9,8 @@ import {
   Box,
   Alert,
   MenuItem,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 
 const AssignmentUpload = () => {
@@ -17,6 +19,8 @@ const AssignmentUpload = () => {
   const [admins, setAdmins] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [file, setFile] = useState(null);
+  const [submitAsFile, setSubmitAsFile] = useState(false);
 
   useEffect(() => {
     const fetchAdmins = async () => {
@@ -32,11 +36,38 @@ const AssignmentUpload = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    if (!adminId) {
+      setErrorMessage('Please select an admin');
+      return;
+    }
+    if(adminId){
+      console.log("admin motherfucker",adminId);
+    }
+    if (!task && !file) {
+      setErrorMessage('Please provide a task or upload a file');
+      return;
+    }
     try {
-      await axios.post('/user/upload', { task, adminId });
+      const formData = new FormData();
+      
+      if (submitAsFile && file) {
+        formData.append('file', file);
+        formData.append('adminId', adminId);
+      } else {
+        
+        formData.append('adminId', adminId);
+        formData.append('task', task);
+      }
+      await axios.post('/user/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       setSuccessMessage('Assignment uploaded successfully.');
       setTask('');
       setAdminId('');
+      setFile(null);
+      setSubmitAsFile(false);
     } catch (err) {
       setErrorMessage(err.response?.data?.message || 'Upload failed.');
     }
@@ -53,7 +84,7 @@ const AssignmentUpload = () => {
         }}
       >
         <Typography component="h1" variant="h5" align="center" gutterBottom>
-          Upload Assignment
+          Submit Assignment
         </Typography>
         {errorMessage && (
           <Alert severity="error" sx={{ mb: 2 }}>
@@ -66,18 +97,6 @@ const AssignmentUpload = () => {
           </Alert>
         )}
         <Box component="form" onSubmit={onSubmit} noValidate>
-          <TextField
-            variant="outlined"
-            label="Task"
-            name="task"
-            value={task}
-            onChange={(e) => setTask(e.target.value)}
-            fullWidth
-            required
-            margin="normal"
-            multiline
-            rows={4}
-          />
           <TextField
             select
             label="Select Admin"
@@ -93,6 +112,49 @@ const AssignmentUpload = () => {
               </MenuItem>
             ))}
           </TextField>
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={submitAsFile}
+                onChange={(e) => setSubmitAsFile(e.target.checked)}
+                color="primary"
+              />
+            }
+            label="Submit as PDF"
+          />
+
+          {submitAsFile ? (
+            <Button
+              variant="contained"
+              component="label"
+              fullWidth
+              sx={{ mt: 2 }}
+            >
+              {file ? 'Change File' : 'Upload PDF'}
+              <input
+                type="file"
+                name='file'
+                accept="application/pdf"
+                hidden
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+            </Button>
+          ) : (
+            <TextField
+              variant="outlined"
+              label="Task"
+              name="task"
+              value={task}
+              onChange={(e) => setTask(e.target.value)}
+              fullWidth
+              required
+              margin="normal"
+              multiline
+              rows={4}
+            />
+          )}
+
           <Button
             type="submit"
             variant="contained"
@@ -100,7 +162,7 @@ const AssignmentUpload = () => {
             fullWidth
             sx={{ mt: 2 }}
           >
-            Upload
+            Submit
           </Button>
         </Box>
       </Box>

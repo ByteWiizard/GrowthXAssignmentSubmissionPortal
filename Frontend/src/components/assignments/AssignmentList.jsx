@@ -1,10 +1,10 @@
 // src/components/Assignments/AssignmentList.js
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Container,
   Typography,
-  Box,
   Alert,
   Table,
   TableBody,
@@ -14,6 +14,7 @@ import {
   TableRow,
   Paper,
   Button,
+  Link,
 } from '@mui/material';
 
 const AssignmentList = () => {
@@ -57,7 +58,7 @@ const AssignmentList = () => {
           <TableHead>
             <TableRow>
               <TableCell>User</TableCell>
-              <TableCell>Task</TableCell>
+              <TableCell>Submission</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Submitted At</TableCell>
               <TableCell align="right">Actions</TableCell>
@@ -67,11 +68,25 @@ const AssignmentList = () => {
             {assignments.map((assignment) => (
               <TableRow key={assignment._id}>
                 <TableCell>{assignment.userId.username}</TableCell>
-                <TableCell>{assignment.task}</TableCell>
+                <TableCell>
+                  {assignment.task ? (
+                    assignment.task
+                  ) : assignment.fileUrl ? (
+                    <Link
+                      href={`http://localhost:5000/${assignment.fileUrl}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {assignment.fileName}
+                    </Link>
+                  ) : (
+                    'No submission'
+                  )}
+                </TableCell>
                 <TableCell>{assignment.status}</TableCell>
                 <TableCell>{new Date(assignment.createdAt).toLocaleString()}</TableCell>
                 <TableCell align="right">
-                  {assignment.status === 'pending' && (
+                  {assignment.status === 'pending' ? (
                     <>
                       <Button
                         variant="contained"
@@ -91,8 +106,7 @@ const AssignmentList = () => {
                         Reject
                       </Button>
                     </>
-                  )}
-                  {assignment.status !== 'pending' && (
+                  ) : (
                     <Typography variant="body2">{assignment.status}</Typography>
                   )}
                 </TableCell>
